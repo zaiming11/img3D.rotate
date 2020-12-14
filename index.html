@@ -1,0 +1,300 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>3D旋转相册</title>
+    <link type="text/css" href="./css/style.css" rel="stylesheet" />
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+            /* background-image: url(./img/3.png); */
+            height: 100%;
+            width: 100%;
+        }
+
+        #box {
+            position: relative;
+            display: flex;
+            width: 130px;
+            height: 200px;
+            margin: auto;
+            transform-style: preserve-3d;
+            transform: rotateX(-10deg);
+        }
+
+        #box>div {
+            transform-style: preserve-3d;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            line-height: 200px;
+            font-size: 50px;
+            text-align: center;
+            box-shadow: 0 0 10px #fff;
+            -webkit-box-reflect: below 10px -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, .8) 100%);
+        }
+
+        #box p {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            margin: auto;
+            width: 1200px;
+            height: 1200px;
+            background: -webkit-radial-gradient(center center, 600px 600px, rgba(50, 50, 50, 1), rgba(0, 0, 0, 0));
+            border-radius: 50%;
+            transform: rotateX(90deg) translate3d(-600px, 0, -105px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="m-main">
+        <div class="player">
+            <a href="javascript:void(0)" rel="external nofollow" rel="external nofollow" id="js-play">
+                <img src="./img/开始.png" alt="" id="img1" />
+            </a>
+            <a href="javascript:void(0)" rel="external nofollow" rel="external nofollow" id="js-pause">
+                <img src="./img/暂停.png" alt="" id="img2" />
+            </a>
+            <div class="play-box">
+                <div class="left">
+                    <p class="timeline"><span style=""></span></p>
+                    <div class="info">
+                        <span class="size">00:00</span>
+                        <span class="timeshow">00:00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="video">
+            <video controls autoplay name="media" id="js-video">
+                <source src="./mp3/我的女孩.mp3" type="video/mp4"></video>
+        </div>
+    </div>
+    <!-- 相册 -->
+    <div id="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <p></p>
+    </div>
+    <!-- 流星 -->
+    <div class="stars">
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+    </div>
+
+    <script>
+        $(function () {
+            AudioControl('js-video');
+
+            function AudioControl(id) {
+                // 音频控制进度条
+                console.log(777);
+                var audio = document.getElementById(id);
+                $(audio).on('loadedmetadata', function () {
+                    audio.pause();
+                    // 进度条控制
+                    $(document).on('touchend', '.timeline', function (e) {
+                        var x = e.originalEvent.changedTouches[0].clientX - this.offsetLeft;
+                        var X = x < 0 ? 0 : x;
+                        var W = $(this).width();
+                        var place = X > W ? W : X;
+                        audio.currentTime = (place / W).toFixed(2) * audio.duration;
+                        $(this).children().css({
+                            width: (place / W).toFixed(2) * 100 + "%"
+                        })
+                    });
+                    // 播放
+                    $(document).on('click', '#js-play', function () {
+                        console.log(666);
+                        audio.play()
+                        $('#img1').css("display", "none");
+                        $('#img2').css("display", "block");
+                    });
+                    // 暂停
+                    $(document).on('click', '#js-pause', function () {
+                        audio.pause()
+                        $('#img1').css("display", "block");
+                        $('#img2').css("display", "none");
+                    });
+                });
+                setInterval(function () {
+                    var currentTime = audio.currentTime;
+                    setTimeShow(currentTime);
+                }, 1000);
+                // 设置播放时间
+                function setTimeShow(t) {
+                    t = Math.floor(t);
+                    var playTime = secondToMin(audio.currentTime);
+                    $(".size").html(playTime);
+                    $('.timeshow').text(secondToMin(audio.duration));
+                    $('.timeline').children().css({
+                        width: (t / audio.duration).toFixed(4) * 100 + "%"
+                    })
+                }
+                // 计算时间
+                function secondToMin(s) {
+                    var MM = Math.floor(s / 60);
+                    var SS = s % 60;
+                    if (MM < 10)
+                        MM = "0" + MM;
+                    if (SS < 10)
+                        SS = "0" + SS;
+                    var min = MM + ":" + SS;
+                    return min.split('.')[0];
+                }
+            }
+        })
+        setTimeout(init, 100);
+
+        function init() {
+            var obox = document.getElementById('box'),
+                aDiv = obox.getElementsByTagName('div');
+
+            for (var i = 0; i < aDiv.length; i++) {
+                aDiv[i].style.background = "url(img/" + (i + 1) + ".jpg) center/cover";
+                aDiv[i].style.transform = "rotateY(" + (i * 36) + "deg) translate3d(0,0,350px)";
+                aDiv[i].style.transition = "transform 1s " + (aDiv.length - i) * 0.2 + "s";
+            }
+            var sX,
+                sY,
+                nX,
+                nY,
+                desX = 0,
+                desY = 0,
+                tX = 0,
+                tY = 10,
+                index = 0; //滚轮初始值
+            document.onmousedown = function (e) {
+                clearInterval(obox.timer);
+                e = e || window.event;
+                var sX = e.clientX,
+                    sY = e.clientY;
+                this.onmousemove = function (e) {
+                    e = e || window.event;
+                    var nX = e.clientX,
+                        nY = e.clientY;
+                    // 当前点的坐标和前一点的坐标差值
+                    desX = nX - sX;
+                    desY = nY - sY;
+                    tX += desX * 0.1;
+                    tY += desY * 0.1;
+
+                    obox.style.transform = "rotateX(" + (-tY) + "deg) rotateY(" + tX + "deg)";
+                    sX = nX;
+                    sY = nY;
+                }
+                this.onmouseup = function () {
+                    this.onmousemove = this.onmouseup = null;
+                    obox.timer = setInterval(function () {
+                        desX *= 0.95;
+                        desY *= 0.95;
+                        tX += desX * 0.1;
+                        tY += desY * 0.1;
+                        obox.style.transform = "rotateX(" + (-tY) + "deg) rotateY(" + tX + "deg)";
+                        if (Math.abs(desX) < 0.5 && Math.abs(desY) < 0.5) {
+                            clearInterval(obox.timer);
+                        }
+                    }, 13);
+                }
+                return false;
+            }
+            //滚轮放大缩小
+            mousewheel(document, function (e) {
+                e = e || window.event;
+                var d = e.wheelDelta / 120 || -e.detail / 3;
+                if (d > 0) {
+                    index -= 20;
+                } else {
+                    index += 30;
+                }
+                (index < (-1050) && (index = (-1050)));
+                document.body.style.perspective = 1000 + index + "px";
+            })
+
+            function mousewheel(obj, fn) {
+                document.onmousewheel === null ? obj.onmousewheel = fn : addEvent(obj, "DOMMouseScroll", fn)
+            }
+
+            function addEvent(obj, eName, fn) {
+                obj.attachEvent ? obj.attachEvent("on" + eName, fn) : obj.addEventListener(eName, fn);
+            }
+        }
+    </script>
+</body>
+
+</html>
